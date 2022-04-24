@@ -1,20 +1,17 @@
 import "./styles.css";
 import { iOptions } from './app.interface'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 
 export default function App() {
 
   const {
     register,
-    // formState: { errors },
+    formState: { errors },
     reset,
     setValue,
     handleSubmit } = useForm<iOptions>({
       mode: 'onBlur',
-      defaultValues: {
-        // darkMode: true,
-      }
     });
   const [data, setData] = useState({
     "dataLayer": "",
@@ -26,51 +23,39 @@ export default function App() {
     "expiration": 0,
     "closeType": ""
   });
-  // const [fetchData, setFetchData] = useState({
-  //   "dataLayer": "dataLayer",
-  //   "darkMode": false,
-  //   "primaryColor": "#f98305",
-  //   "borderRadius": 6,
-  //   "dismissable": false,
-  //   "dismissType": "text",
-  //   "expiration": 365,
-  //   "closeType": "cross"
-  // });
 
-  console.log(data)
 
   const onSubmit: SubmitHandler<iOptions> = (data) => {
-    console.log(setData(data))
+    console.log(data)
     reset()
   }
 
-// extention below helped me to  use a CORS proxy to avoid “No Access-Control-Allow-Origin header” problems
-// https://chrome.google.com/webstore/detail/moesif-origin-cors-change/digfbfaphojjndkpccljibejjbppifbc/related
-  useEffect(()=>{
+  // extention below helped me to  use a CORS proxy to avoid “No Access-Control-Allow-Origin header” problems
+  // https://chrome.google.com/webstore/detail/moesif-origin-cors-change/digfbfaphojjndkpccljibejjbppifbc/related
+  useEffect(() => {
     fetch(`https://fevladimir.blob.core.windows.net/vladimir/assets/options.json`)
-      .then(res=>res.json())
-      .then(data=>{
+      .then(res => res.json())
+      .then(data => {
         setData(data)
-        // console.log(data)
       })
-  },[])
-  // console.log(fetchData)
+  }, [])
 
-  const change = () =>{
-  }
+  const change = () =>  setData({ ...data, darkMode: !data.darkMode })
 
-//-----------------------------------------------------------------------------------------------
+  const change1 = () =>  setData({ ...data, dismissable: !data.dismissable })
+
+  //-----------------------------------------------------------------------------------------------
   return (
     <div className="App">
-      <h1>React Hook Forms</h1>
+      <h1>Cross Masters' Forms SPA</h1>
 
-      <button
-        onClick={() => {
+      <button className="btn"
+        onClick={(e) => {
           setValue('dataLayer', data.dataLayer)
-          setValue('darkMode', data.darkMode)
+          setValue('darkMode', e.target.checked ? true : false )
           setValue('primaryColor', data.primaryColor)
           setValue('borderRadius', data.borderRadius)
-          setValue('dismissable', data.dismissable)
+          setValue('dismissable', e.target.checked ? true : false)
           setValue('dismissType', data.dismissType)
           setValue('expiration', data.expiration)
           setValue('closeType', data.closeType)
@@ -78,78 +63,83 @@ export default function App() {
       >
         Fill data
       </button>
-      <button onClick={() => reset()} >clear data</button>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-
-
 
         <input {...register("dataLayer",
           { required: false })}
           placeholder="Data Layer object name" />
 
-        {/* <input {...register("dataLayer",
-          { required: false })}
-        type="checkbox" name="vehicle1" value="Bike" /> */}
+        <label className="container">DarkMode
+        <input {...register("darkMode",
+            { required: false })}
+            type="checkbox" checked={data.darkMode===undefined ? false : data.darkMode} onClick={change}  />
+            <span className="checkmark"></span>
+        </label>
 
-        <div>
-          <h3>DarkMode</h3>
-          <input {...register("darkMode",
-          { required: false })}
-        type="checkbox" name="vehicle1"  onClick={change} />
-        </div>
-
-
-        <input {...register("primaryColor",
-        )}
-          placeholder="Primary action color. Used for buttons and links." />
+        
+        <label htmlFor="color"  className="container" >Primary Color</label>
+        <input id="color" name="color"  className="color" type="color" 
+        {...register("primaryColor",
+        { required: true }
+        )} />
+        
 
         <input {...register("borderRadius",
-          { required: false })}
+          { required: 'Basic border radius for elements with rounded corners.' })}
           type="number"
-          placeholder="Basic border radius for elements with rounded corners." />
+          placeholder="borderRadius" />
+                  {errors?.dismissType && (
+					<div >{errors.dismissType.message}</div>
+				)}
 
-        {/* <input {...register("dismissable",
-          { required: false })}
-          placeholder="If the consentbar is dismissable without consent actions" /> */}
-        <div>
-          <h3>dismissable</h3>
-          <input {...register("dismissable",
-          { required: false })}
-        type="checkbox" name="vehicle1"   checked />
-        </div>
+        <label className="container">Dismissable
+        <input {...register("dismissable",
+            { required: true })}
+            type="checkbox"  onClick={change1} checked={data.dismissable} />
+            <span className="checkmark"></span>
+        </label>
 
-{/* <div>
-          <h3>dismissable</h3>
-          <label {...register("dismissable",
-            { required: false })}
-            className="switch">
-            <input type="checkbox"  />
-            <span className="slider round"></span>
-          </label>
-        </div> */}
-
-        <select {...register("dismissType")}>
-          <option value="">'cross' | 'cross-faint' | 'text'</option>
+        <select {...register("dismissType", 
+        { required: 'dismissType is require field! Type of action to dismiss consentbar.' })}>
+          <option value="">dismissType</option>
           <option value="cross">cross</option>
           <option value="cross-faint">cross-faint</option>
           <option value="text">text</option>
         </select>
+        {errors?.dismissType && (
+					<div >{errors.dismissType.message}</div>
+				)}
 
         <input {...register("expiration",
-          { required: false })}
-          placeholder="Basic border radius for elements with rounded corners." />
+          { required: 'Expiration is require field! Basic border radius for elements with rounded corners.' })}
+          placeholder="Expiration" />
+          {errors?.expiration && (
+					<div >{errors.expiration.message}</div>
+				)}
 
-        <select {...register("closeType")}>
-          <option value="">'cross' | 'tab'</option>
+        <select {...register("closeType", { required: 'closeType is require field! Type of the closing action for Precen.' } )}>
+          <option value="">closeType</option>
           <option value="cross">cross</option>
           <option value="tab">tab</option>
         </select>
+        {errors?.closeType && (
+					<div >{errors.closeType.message}</div>
+				)}
+        
 
         <input type="submit" value="Submit" />
-        {/* <p>{data}</p> */}
         
+
       </form>
+      <button className="btn" onClick={() => reset()} >Reset</button>
     </div>
   );
 }
+
+
+
+
+
+
+
