@@ -47,7 +47,7 @@ export default function App() {
   //-----------------------------------------------------------------------------------------------
   return (
     <div className="App">
-      <h1>Cross Masters' Forms SPA</h1>
+      <h1>Cross Masters' Forms App</h1>
 
       <button className="btn"
         onClick={(e) => {
