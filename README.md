@@ -17,5 +17,7 @@ Steps to reproduce:
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-
 Learn more about 'react hook form' library [https://react-hook-form.com/]
+
+
+- After validation, the result is saved as a JSON format in the console.
