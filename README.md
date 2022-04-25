@@ -2,7 +2,7 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-To run this app in the development mode you have to clone this repository, install modules and 'react hook form' library.
+To run this app in the development mode you have to clone this repository, install modules and 'react-hook-form' library.
 
 Steps to reproduce:
 
