@@ -104,7 +104,7 @@ export default function App() {
         <label className="container">Dismissable
           <input
             {...register("dismissable",
-              { required: true })}
+              { required: false })}
             type="checkbox"
             onClick={change1}
             checked={data.dismissable} />
