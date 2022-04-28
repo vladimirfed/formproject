@@ -1,4 +1,4 @@
-# Getting Started with Cross Masters' Forms SPA
+# Getting Started with  Forms SPA
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
